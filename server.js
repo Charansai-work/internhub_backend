@@ -1,26 +1,20 @@
-require('dotenv').config(); // ✅ ONLY THIS (once, at top)
+require('dotenv').config(); // ✅ load env
 
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); // ✅ ONLY ONCE
 const morgan = require('morgan');
 
 const connectDB = require('./config/db');
 
-// Connect to MongoDB
+// Connect DB
 connectDB();
 
 const app = express();
 
-// ✅ CORS — allow all localhost ports during development
-const cors = require('cors')
+// ✅ SIMPLE CORS (WORKS EVERYWHERE)
+app.use(cors());
 
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://internhub-frontend-amber.vercel.app'
-  ],
-  credentials: true
-}))
+// Middleware
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -47,6 +41,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
